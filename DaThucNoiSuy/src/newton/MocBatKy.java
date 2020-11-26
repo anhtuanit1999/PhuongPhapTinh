@@ -33,7 +33,7 @@ public class MocBatKy {
 		float result = arrTSP.get(1).get(0);
 	    float temp = 1;
 	    for (int i = 0; i < soTSP; i++) {
-	        temp *= (n - i);
+	        temp *= (n - arrTSP.get(0).get(i));
 	        result += temp * arrTSP.get(i + 2).get(0);
 	    }
 		return result;
