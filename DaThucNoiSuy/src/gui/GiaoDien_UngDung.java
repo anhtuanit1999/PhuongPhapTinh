@@ -241,6 +241,9 @@ public class GiaoDien_UngDung implements ActionListener, KeyListener {
 		if(kiemTraTextField(1)) {
 			float giaTriN = Float.parseFloat(txtGiaTriN.getText().trim());
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			if(model.getRowCount() < 1) {
+				return;
+			}
 			String tieuChi = comboBoxTieuChi.getSelectedItem().toString();
 			float[][] list = new float[model.getRowCount()][2];
 			
