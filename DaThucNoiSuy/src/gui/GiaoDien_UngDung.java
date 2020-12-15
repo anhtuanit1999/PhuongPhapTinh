@@ -28,7 +28,7 @@ import lagrange.MocCachDeu;
 import newton.MocBatKy;
 
 public class GiaoDien_UngDung implements ActionListener, KeyListener {
-
+	//hihi
 	private JFrame frame;
 	private JTextField txtGiaTriX;
 	private JTextField txtGiaTriY;
@@ -70,6 +70,7 @@ public class GiaoDien_UngDung implements ActionListener, KeyListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		System.out.println("hihi");
 		mocCachDeu = new MocCachDeu();
 		mocBatKy = new MocBatKy();
 		frame = new JFrame();
