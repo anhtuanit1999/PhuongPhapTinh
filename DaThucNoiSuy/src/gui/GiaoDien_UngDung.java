@@ -28,7 +28,7 @@ import lagrange.MocCachDeu;
 import newton.MocBatKy;
 
 public class GiaoDien_UngDung implements ActionListener, KeyListener {
-	//hihi
+	// Diep
 	private JFrame frame;
 	private JTextField txtGiaTriX;
 	private JTextField txtGiaTriY;
