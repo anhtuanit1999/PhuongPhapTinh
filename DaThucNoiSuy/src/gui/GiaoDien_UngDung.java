@@ -6,7 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -17,14 +24,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class GiaoDien_UngDung {
+import lagrange.MocCachDeu;
+import newton.MocBatKy;
 
+public class GiaoDien_UngDung implements ActionListener, KeyListener {
+	// Diep
 	private JFrame frame;
 	private JTextField txtGiaTriX;
 	private JTextField txtGiaTriY;
 	private JTextField txtGiaTriN;
 	private JTextField txtKetQua;
 	private JTable table;
+	private JButton btnTinh;
+	private JButton btnXoaTrang;
+	private JButton btnThem;
+	private JComboBox comboBoxTieuChi;
+	private MocCachDeu mocCachDeu;
+	private MocBatKy mocBatKy;
+	private JButton btnXoaBang;
 
 	/**
 	 * Launch the application.
@@ -53,6 +70,9 @@ public class GiaoDien_UngDung {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		System.out.println("hihi");
+		mocCachDeu = new MocCachDeu();
+		mocBatKy = new MocBatKy();
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 634, 457);
@@ -96,7 +116,7 @@ public class GiaoDien_UngDung {
 		lblTieuChi.setBounds(35, 70, 74, 19);
 		pnCenter.add(lblTieuChi);
 		
-		JComboBox comboBoxTieuChi = new JComboBox();
+		comboBoxTieuChi = new JComboBox();
 		comboBoxTieuChi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		comboBoxTieuChi.setModel(new DefaultComboBoxModel(new String[] {"Lagrange m\u1ED1c c\u00E1ch \u0111\u1EC1u", "Newton m\u1ED1c b\u1EA5t k\u1EF3"}));
 		comboBoxTieuChi.setBounds(119, 71, 193, 20);
@@ -112,19 +132,19 @@ public class GiaoDien_UngDung {
 		txtGiaTriN.setBounds(406, 71, 193, 20);
 		pnCenter.add(txtGiaTriN);
 		
-		JButton btnThem = new JButton("Th\u00EAm");
+		btnThem = new JButton("Th\u00EAm");
 		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnThem.setBounds(119, 148, 89, 23);
+		btnThem.setBounds(58, 150, 89, 23);
 		pnCenter.add(btnThem);
 		
-		JButton btnXoaTrang = new JButton("X\u00F3a tr\u1EAFng");
+		btnXoaTrang = new JButton("X\u00F3a tr\u1EAFng");
 		btnXoaTrang.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnXoaTrang.setBounds(272, 148, 105, 23);
+		btnXoaTrang.setBounds(194, 150, 105, 23);
 		pnCenter.add(btnXoaTrang);
 		
-		JButton btnTinh = new JButton("T\u00EDnh");
+		btnTinh = new JButton("T\u00EDnh");
 		btnTinh.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnTinh.setBounds(439, 148, 89, 23);
+		btnTinh.setBounds(489, 150, 89, 23);
 		pnCenter.add(btnTinh);
 		
 		JLabel lblKetQua = new JLabel("K\u1EBFt qu\u1EA3: ");
@@ -151,6 +171,131 @@ public class GiaoDien_UngDung {
 			}
 		));
 		scrollPane.setViewportView(table);
+		
+		btnXoaBang = new JButton("Xóa bảng");
+		btnXoaBang.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnXoaBang.setBounds(341, 150, 105, 23);
+		pnCenter.add(btnXoaBang);
+		
+		btnThem.addActionListener(this);
+		btnXoaTrang.addActionListener(this);
+		btnXoaBang.addActionListener(this);
+		btnTinh.addActionListener(this);
+		
+		txtGiaTriY.addKeyListener(this);
+		txtGiaTriN.addKeyListener(this);
+	}
+	
+	public void xoaTrang() {
+		txtGiaTriX.setText("");
+		txtGiaTriY.setText("");
+		txtGiaTriN.setText("");
+		txtKetQua.setText("");
+	}
+	
+	public void xoaBang() {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0);
+	}
+	
+	public boolean kiemTraTextField(int n) {
+		String regex = "^-?\\d+\\.?\\d*$";
+		if(n == 1) {
+			if(!txtGiaTriN.getText().trim().matches(regex)) {
+				JOptionPane.showMessageDialog(frame, "Chỉ chấp nhập số nguyên và số thập phân");
+				txtGiaTriN.requestFocus();
+				txtGiaTriN.selectAll();
+				return false;
+			}
+		} else {
+			if(!txtGiaTriX.getText().trim().matches(regex)) {
+				JOptionPane.showMessageDialog(frame, "Chỉ chấp nhập số nguyên và số thập phân");
+				txtGiaTriX.requestFocus();
+				txtGiaTriX.selectAll();
+				return false;
+			} else if(!txtGiaTriY.getText().trim().matches(regex)) {
+				JOptionPane.showMessageDialog(frame, "Chỉ chấp nhập số nguyên và số thập phân");
+				txtGiaTriY.requestFocus();
+				txtGiaTriY.selectAll();
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void eventThem() {
+		if(kiemTraTextField(0)) {
+			String giaTriX = txtGiaTriX.getText().trim();
+			String giaTriY = txtGiaTriY.getText().trim();
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			String[] rowData = {
+					giaTriX,
+					giaTriY
+			};
+			model.addRow(rowData);
+			xoaTrang();
+			txtGiaTriX.requestFocus();
+		}
+	}
+	
+	public void eventTinh() {
+		if(kiemTraTextField(1)) {
+			float giaTriN = Float.parseFloat(txtGiaTriN.getText().trim());
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			if(model.getRowCount() < 1) {
+				return;
+			}
+			String tieuChi = comboBoxTieuChi.getSelectedItem().toString();
+			float[][] list = new float[model.getRowCount()][2];
+			
+			for (int i = 0; i < model.getRowCount() ; i++) {
+				list[i] = new float[] {Float.parseFloat(table.getValueAt(i, 0).toString()), Float.parseFloat(table.getValueAt(i, 1).toString())}; 
+			}
+			
+			if(tieuChi.equals("Lagarange mốc cách đều")) {
+				txtKetQua.setText(mocCachDeu.lagrangeCal(list, giaTriN) + "");
+			} else {
+				txtKetQua.setText(mocBatKy.Newton(list, giaTriN) + "");
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if(o.equals(btnXoaTrang)) {
+			xoaTrang();
+		} else if(o.equals(btnThem)) {
+			eventThem();
+		} else if(o.equals(btnTinh)) {
+			eventTinh();
+		} else if(o.equals(btnXoaBang)) {
+			xoaBang();
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Object o = e.getSource();
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if(o.equals(txtGiaTriY)) {
+				eventThem();
+			} else if(o.equals(txtGiaTriN)) {
+				eventTinh();
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
